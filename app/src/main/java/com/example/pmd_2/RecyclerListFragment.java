@@ -7,12 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.example.pmd_2.helper.SimpleItemTouchHelperCallback;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.pmd_2.helper.SimpleItemTouchHelperCallback;
 
 public class RecyclerListFragment extends Fragment {
 
@@ -42,6 +46,10 @@ public class RecyclerListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(recyclerView);
 
     }
 }

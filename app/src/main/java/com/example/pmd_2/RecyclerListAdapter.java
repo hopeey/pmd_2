@@ -5,14 +5,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.pmd_2.helper.ItemTouchHelperAdapter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder> {
+public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>
+        implements ItemTouchHelperAdapter {
 
     private static final String[] STRINGS = new String[]{
             "One", "Two", "Three", "Four", "Five"
@@ -35,6 +39,26 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
         holder.textView.setText(mItems.get(position));
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        mItems.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mItems, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mItems, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
