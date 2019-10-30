@@ -5,11 +5,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder> {
 
+    private static final String[] STRINGS = new String[]{
+            "One", "Two", "Three", "Four", "Five"
+    };
+
+    private final List<String> mItems = new ArrayList<>();
+
+    public RecyclerListAdapter() {
+        mItems.addAll(Arrays.asList(STRINGS));
+    }
 
     @NonNull
     @Override
@@ -21,12 +34,12 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
-        holder.textView.setText("Hello!");
+        holder.textView.setText(mItems.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 1;
+        return mItems.size();
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
