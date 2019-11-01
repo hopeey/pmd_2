@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.pmd_2.helper.ItemTouchHelperAdapter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         void onStartDrag(RecyclerView.ViewHolder viewHolder);
     }
 
-    private final List<String> mItems = Arrays.asList("One", "Two", "Three", "Four", "Five");
+    private static final List<Integer> numbers = new ArrayList<>(10);
 
     private final OnStartDragListener mDragStartListener;
 
@@ -43,7 +44,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     @Override
     public void onBindViewHolder(final ItemViewHolder holder, int position) {
-        holder.textView.setText(mItems.get(position));
+        holder.textView.setText(numbers.get(position).toString());
         holder.handleView.setOnTouchListener((v, event) -> {
             if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                 mDragStartListener.onStartDrag(holder);
@@ -54,7 +55,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     @Override
     public void onItemDismiss(int position) {
-        mItems.remove(position);
+        numbers.remove(position);
         notifyItemRemoved(position);
     }
 
@@ -62,11 +63,11 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     public void onItemMove(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(mItems, i, i + 1);
+                Collections.swap(numbers, i, i + 1);
             }
         } else {
             for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(mItems, i, i - 1);
+                Collections.swap(numbers, i, i - 1);
             }
         }
         notifyItemMoved(fromPosition, toPosition);
@@ -74,7 +75,16 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return numbers.size();
+    }
+
+    public void fillNumbers(int max) {
+        numbers.clear();
+        for (int i = 0; i < max; i++) {
+            numbers.add(i + 1);
+        }
+        Collections.shuffle(numbers);
+        notifyDataSetChanged();
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -88,7 +98,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             super(itemView);
             textView = itemView.findViewById(R.id.text);
             handleView = itemView.findViewById(R.id.handle);
-
         }
     }
 
