@@ -18,7 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pmd_2.helper.SimpleItemTouchHelperCallback;
 
-public class RecyclerListFragment extends Fragment {
+public class RecyclerListFragment extends Fragment
+        implements RecyclerListAdapter.OnStartDragListener {
 
     private RecyclerListAdapter adapter;
     private ItemTouchHelper mItemTouchHelper;
@@ -40,7 +41,7 @@ public class RecyclerListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new RecyclerListAdapter();
+        adapter = new RecyclerListAdapter(this);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -51,5 +52,10 @@ public class RecyclerListFragment extends Fragment {
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerView);
 
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }
