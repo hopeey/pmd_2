@@ -50,6 +50,7 @@ public class RecyclerListFragment extends Fragment
         plusButton = view.findViewById(R.id.button_plus);
         minusButton = view.findViewById(R.id.button_minus);
         quantityView = view.findViewById(R.id.quantity);
+        setText();
 
         setOnClickListeners();
 
