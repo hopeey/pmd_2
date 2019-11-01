@@ -1,13 +1,17 @@
 package com.example.pmd_2;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pmd_2.helper.ItemTouchHelperAdapter;
+import com.example.pmd_2.helper.ItemTouchHelperViewHolder;
+import com.google.common.collect.Ordering;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,6 +78,17 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
     }
 
     @Override
+    public void onItemMoved() {
+        if (Ordering.natural().isOrdered(numbers) ||
+                Ordering.natural().reverse().isOrdered(numbers)) {
+            Toast.makeText(MainActivity.getAppContext(), "Ordered", Toast.LENGTH_LONG)
+                    .show();
+            Collections.shuffle(numbers);
+            notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public int getItemCount() {
         return numbers.size();
     }
@@ -87,7 +102,8 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
         notifyDataSetChanged();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder
+    implements ItemTouchHelperViewHolder {
 
 
         public final TextView textView;
@@ -98,6 +114,16 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             super(itemView);
             textView = itemView.findViewById(R.id.text);
             handleView = itemView.findViewById(R.id.handle);
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.YELLOW);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(0);
         }
     }
 
