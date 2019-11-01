@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.pmd_2.helper.SimpleItemTouchHelperCallback;
 
@@ -20,6 +22,9 @@ public class RecyclerListFragment extends Fragment
     private RecyclerListAdapter adapter;
     private ItemTouchHelper mItemTouchHelper;
 
+    private Button plusButton;
+    private Button minusButton;
+    private TextView quantityView;
     private static int quantity = 10;
 
 
@@ -42,6 +47,12 @@ public class RecyclerListFragment extends Fragment
         adapter = new RecyclerListAdapter(this);
         adapter.fillNumbers(quantity);
 
+        plusButton = view.findViewById(R.id.button_plus);
+        minusButton = view.findViewById(R.id.button_minus);
+        quantityView = view.findViewById(R.id.quantity);
+
+        setOnClickListeners();
+
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -56,5 +67,30 @@ public class RecyclerListFragment extends Fragment
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
+    }
+
+    private void setOnClickListeners() {
+        plusButton.setOnClickListener(v -> {
+            quantity++;
+            if (quantity > Integer.MAX_VALUE - 1) {
+                quantity = Integer.MAX_VALUE - 1;
+            }
+            adapter.fillNumbers(quantity);
+            setText();
+        });
+
+        minusButton.setOnClickListener(v -> {
+            quantity--;
+            if (quantity < 3) {
+                quantity = 3;
+                return;
+            }
+            adapter.fillNumbers(quantity);
+            setText();
+        });
+    }
+
+    private void setText() {
+        quantityView.setText(String.valueOf(quantity));
     }
 }
